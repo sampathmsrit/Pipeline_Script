@@ -1,37 +1,26 @@
-pipeline {
-    agent none
-    stages {
-	
-	stage('Non-Parallel Stage') {
-	    agent {
-                        label "master"
-                }
-        steps {
-                echo 'This stage will be executed first'
-                }
-        }
+pipeline{
+	agent any
+	stages{
+		stage('Source'){
+			steps{echo "Compiled successfully"
+			git 'https://github.com/simplilearn-github/Pipeline_Script.git'}
+				}
+		stage('Build'){
+			steps{echo "Qulaity successfully"
+			bat label: '', script: 'Build.bat'}
+				}
+		stage('Quality'){
+			steps{echo "Deploy successfully"
+			bat label: '', script: 'Quality.bat'}
+				}
+		stage('Deploy'){
+			steps{echo "Test successfully"
+			bat label: '', script: 'Deploy.bat'}
+				}
+		stage('Unit'){
+			steps{echo "Test successfully"
+			bat label: '', script: 'Unit.bat'}
+				}
 
-	
-        stage('Run Tests') {
-            parallel {
-                stage('Test On Windows') {
-                    agent {
-                        label "Windows_Node"
-                    }
-                    steps {
-                        echo "Task1 on Agent"
-                    }
-                    
-                }
-                stage('Test On Master') {
-                    agent {
-                        label "master"
-                    }
-                    steps {
-						echo "Task1 on Master"
-					}
-                }
-            }
-        }
-    }
-}
+		}
+	}
